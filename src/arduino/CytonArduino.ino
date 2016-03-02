@@ -319,10 +319,6 @@ void loop() {
 
       // Forward Kinematics
       else if (Input == 2){
-//        while(!Serial.available()){
-//          delay(10);
-//        }
-        
         while(1){
           while(!Serial.available()){
             delay(10);
@@ -341,12 +337,12 @@ void loop() {
         }
       }
 
-      // Shadow Clone
+      // Record
       else if (Input == 3){
         Record();
       }
 
-       // Replay last path recorded
+       // Replay
        else if (Input == 4){
          if (ang0[0] != 999)
             Replay();
