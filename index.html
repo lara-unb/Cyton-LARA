@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Cyton LARA by lara-unb</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Cyton LARA</h1>
+          <h2>Manipulador Cyton LARA</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/lara-unb/Cyton-LARA/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/lara-unb/Cyton-LARA/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/lara-unb/Cyton-LARA" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="cyton-lara" class="anchor" href="#cyton-lara" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cyton-LARA</h1>
+
+<p>Cyton Alpha 7D1G is a 7 DOF Robot Arm developed by Robai. It presents 9 servo motors controlled by a SSC-32 board. However, the servo motors does not provide position feedback. For this reason, the Cyton Alpha only allows open-loop projects, restricting a lot the possibilities of development. This project has as main goal closing the loop of the Cyton arm and developing a Matlab-Arduino user interface with some functions.  </p>
+
+<div>
+<img src="images/3.jpg" alt="some text" width="420" height="420">
+</div>
+
+<h2>
+<a id="hardware-required" class="anchor" href="#hardware-required" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hardware Required</h2>
+
+<ol>
+<li>Cyton Alpha 7D1G</li>
+<li>Arduino Mega</li>
+</ol>
+
+<h2>
+<a id="software-required" class="anchor" href="#software-required" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Software Required</h2>
+
+<ol>
+<li>Arduino IDE</li>
+<li>Matlab</li>
+</ol>
+
+<h2>
+<a id="hardware-modification---closing-the-loop" class="anchor" href="#hardware-modification---closing-the-loop" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hardware Modification - Closing the Loop</h2>
+
+<p>In order to close the loop of the arm, it is necessary to get the position of each servo motor (only 7 of them). Each servo motor has a potentiometer inside. Somehow, most of them doesn't have a wire solded on it. The ideia is to open the servos and sold a wire on the potentiometer. Doing so, for each servo position, the potentiometer will show a different voltage. Also, it is possible to see that the voltage grows linearly according to the servo position. Obs.: Do this at your own risk.</p>
+
+<div>
+<img src="images/1.jpg" alt="some text" width="420" height="420">
+</div>
+
+<div>
+<img src="images/2.jpg" alt="some text" width="420" height="420">
+</div>
+
+<h2>
+<a id="arduino-mega" class="anchor" href="#arduino-mega" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arduino Mega</h2>
+
+<p>The Cyton C++ API provided by Robai is good way to program the arm, however, as we are working with the feedback, the Arduino Mega is included in the hardware for reading the servo voltage values and also to execute the servo movement. How? Plugging a wire on the Arduino TX port on the SSC-32 RX port will allow to communicate both boards through Serial. Also, it is needed to plug a wire from Arduino Ground to the SSC-32 ground. It is recommended to set the baud rate of SSC-32 to 9600 (just disconnect to first jumper located in the BAUD section of the board). And one final detail: connect the Arduino AREF port tot he 3.3 V port in order to augment the servo feedback resolution.</p>
+
+<div>
+<img src="images/4.jpg" alt="some text" width="420" height="420">
+</div>
+
+<h2>
+<a id="matlab" class="anchor" href="#matlab" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matlab</h2>
+
+<p>The Matlab is mainly used to calculate the Forward Kinematics of the arm, as the Arduino is not powerful enough to do so. Also, it is used to present the User Interface with a Menu with some options.</p>
+
+<h2>
+<a id="arduino-libraries-required" class="anchor" href="#arduino-libraries-required" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Arduino Libraries Required</h2>
+
+<ol>
+<li>SSC32: <a href="http://blog.martinperis.com/2011/05/libssc32-arduino-ssc32.html">http://blog.martinperis.com/2011/05/libssc32-arduino-ssc32.html</a>
+</li>
+<li>Filters: <a href="https://github.com/JonHub/Filters">https://github.com/JonHub/Filters</a>
+</li>
+<li>StandardCplusplus: <a href="https://github.com/maniacbug/StandardCplusplus">https://github.com/maniacbug/StandardCplusplus</a>
+</li>
+</ol>
+
+<h2>
+<a id="maltab-toolbox-required" class="anchor" href="#maltab-toolbox-required" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Maltab Toolbox Required</h2>
+
+<ol>
+<li>DQ Robotics: <a href="http://dqrobotics.sourceforge.net/">http://dqrobotics.sourceforge.net/</a>
+</li>
+</ol>
+
+<h2>
+<a id="dh-parameters" class="anchor" href="#dh-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>DH Parameters</h2>
+
+<p>theta =  [0, 0, 0, 0, pi, pi/2, 0]<br>
+d =     [0.0379, -0.0046, 0.145, -0.011, 0.175, 0.0074, 0.0]<br>
+a =     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0677]<br>
+alpha = [0, pi/2, -pi/2, pi/2, -pi/2, pi/2, pi/2]  </p>
+
+<h2>
+<a id="matlab-menu" class="anchor" href="#matlab-menu" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matlab Menu</h2>
+
+<p>The file main.m is the main program that initialize the User Interface and also calls the other functions created. The Menu looks as shown below:</p>
+
+<pre><code>    0. Connect to Arduino
+    1. Initial Position
+    2. Forward Kinematics
+    3. Record
+    4. Replay
+    5. Change Desired Position (Manual)
+    6. Simulation (Forward Kinematics)
+    7. Position Feedback
+    8. Help
+    9. Close
+</code></pre>
+
+<ol>
+<li>Connect to Arduino: Initialize the Serial Port.</li>
+<li>Initial Position: Set all the Servos to 0 degrees (Vertical Position).</li>
+<li>Forward Kinematics: According to the desired position, a vector of angles is calculated by Forward Kinematics and it is sent to the Arduino via Serial several times until the Arm reaches the final position. The Arduino receives each vector of angles. and send a movement command to the arm also via Serial.</li>
+<li>Record: Record the movement of the arm through time.</li>
+<li>Replay: Repeat the movement recorded. It is recommended to set the arm to the initial position before executing the Replay option.</li>
+<li>Change Desired Position: Changes the desired position used in Option 2 (Forward Kinematics) and 6 (Simulation).</li>
+<li>Simulation: Simulates the Forward Kinematics according to the desired position. It is recommended to simulates the Forward Kinematics first before executing it on the robot.</li>
+<li>Position Feedback: Returns the angle position of each servo of the arm.</li>
+<li>Help: Shows the functionalities of each option.</li>
+<li>Close: Closes the Serial Port and also the program.</li>
+</ol>
+        </section>
+
+        <footer>
+          Cyton LARA is maintained by <a href="https://github.com/lara-unb">lara-unb</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
