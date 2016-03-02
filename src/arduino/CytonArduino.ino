@@ -7,13 +7,6 @@
  
 #include <SSC32.h>
 
-//#include <FilterDerivative.h>
-//#include <FilterOnePole.h>
-//#include <Filters.h>
-//#include <FilterTwoPole.h>
-//#include <FloatDefine.h>
-//#include <RunningStatistics.h>
-
 #include <StandardCplusplus.h>
 #include <system_configuration.h>
 #include <unwind-cxx.h>
@@ -107,9 +100,6 @@ public:
 PID servoPID0(-0.1, 0.005, 0.0005);PID servoPID1(-0.1, 0.005, 0.0005);PID servoPID2(-0.1, 0.005, 0.0005);
 PID servoPID3(-0.1, 0.005, 0.0005);PID servoPID4(-0.1, 0.005, 0.0005);PID servoPID5(-0.1, 0.005, 0.0005);
 PID servoPID6(-0.1, 0.005, 0.0005);
-//PID servoPID0(0.4, 0.00, 0.000);PID servoPID1(0.4, 0.00, 0.000);PID servoPID2(0.4, 0.00, 0.000);
-//PID servoPID3(0.4, 0.00, 0.000);PID servoPID4(0.4, 0.00, 0.000);PID servoPID5(0.4, 0.00, 0.000);
-//PID servoPID6(0.4, 0.00, 0.000);
 
 //============== Setup ===========================================
 
@@ -197,10 +187,6 @@ void PIDControl(vector <float> angles_float, vector <float> feedback){
 vector <float> ReadAngles(){
   
   vector <float> angles_float;
-  
-//  while(!Serial.available()){
-//    delay(10);
-//  }
 
   angles_float.clear();
   if (Serial.available()){
