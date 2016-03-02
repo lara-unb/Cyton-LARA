@@ -46,7 +46,7 @@ a =     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0677]
 alpha = [0, pi/2, -pi/2, pi/2, -pi/2, pi/2, pi/2]  
 
 ## Matlab Menu
-The file CytonMatlab.m is the main program that initialize the User Interface and also calls the other functions created. The Menu looks as shown below:
+The file main.m is the main program that initialize the User Interface and also calls the other functions created. The Menu looks as shown below:
 				 
 		0. Connect to Arduino
 		1. Initial Position
