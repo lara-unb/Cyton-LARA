@@ -23,7 +23,7 @@ In order to close the loop of the arm, it is necessary to get the position of ea
 </div>
 
 ## Arduino Mega
-The Cyton C++ API provided by Robai is good way to program the arm, however, as we are working with the feedback, the Arduino Mega is included in the hardware for reading the servo voltage values and also to execute the servo movement. How? Plugging a wire on the Arduino TX port on the SSC-32 RX port will allow to communicate both boards through Serial. Also, it is needed to plug a wire from Arduino Ground to the SSC-32 ground. It is recommended to set the baud rate of SSC-32 to 9600 (just disconnect to first jumper located in the BAUD section of the board). And one final detail: connect the Arduino AREF port tot he 3.3 V port in order to augment the servo feedback resolution.
+The Cyton C++ API provided by Robai is a good way to program the arm, however, as we are working with the feedback, the Arduino Mega is included in the hardware for reading the servo voltage values and also to execute the servo movement. How? Plugging a wire on the Arduino TX port on the SSC-32 RX port will allow to communicate both boards through Serial. Also, it is needed to plug a wire from Arduino Ground to the SSC-32 ground. It is recommended to set the baud rate of SSC-32 to 9600 (just disconnect to first jumper located in the BAUD section of the board). And one final detail: connect the Arduino AREF port tot he 3.3 V port in order to augment the servo feedback resolution.
 <div style="text-align:center">
 <IMG SRC="images/4.jpg" ALT="some text" WIDTH=420 HEIGHT=420>
 </div>
