@@ -206,7 +206,7 @@ vector <float> FKM(){
     return angles_float;
   else{
     duration = 700;
-    //setMultServos(angles_float, duration);
+    setMultServos(angles_float, duration);
     return angles_float;
   }
 }
