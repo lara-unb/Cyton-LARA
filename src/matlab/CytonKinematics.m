@@ -33,7 +33,7 @@ while norm(error) > epsilon
     theta = theta + pinv(J)*K*error;
     fprintf(arduino, '%f %f %f %f %f %f %f ', rad2deg([theta(1) -theta(2) theta(3) theta(4) theta(5) theta(6) theta(7)]));
     disp (rad2deg([theta(1) -theta(2) theta(3) theta(4) theta(5) theta(6) theta(7)]));
-    delay (0.8);    funciona
+    delay (0.8);
 
 end
 fprintf(arduino, '%f %f %f %f %f %f %f ', [999 0 0 0 0 0 0]);
