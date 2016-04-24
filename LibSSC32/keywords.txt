@@ -1,0 +1,13 @@
+SSC32	KEYWORD1
+beginGroupCommand	KEYWORD2
+abortGroupCommand	KEYWORD2
+endGroupCommand	KEYWORD2
+servoMove	KEYWORD2
+servoMoveTime	KEYWORD2
+pulseOffset	KEYWORD2
+discreteOutput	KEYWORD2
+byteOutput	KEYWORD2
+isMoving	KEYWORD2
+queryPulseWidth	KEYWORD2
+readDigitalInput	KEYWORD2
+readAnalogInput	KEYWORD2
