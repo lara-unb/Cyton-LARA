@@ -1,9 +1,9 @@
-% Universidade de Brasília
-% Laboratório de Automação e Robótica
+% Universidade de BrasÃ­lia
+% LaboratÃ³rio de AutomaÃ§Ã£o e RobÃ³tica
 % Autor: De Hong Jung
-% Programa: Interface com usuário para execução de funções para o braço
-%           robótico Cyton Alpha 7D1G
-%           Comunicação com Arduino
+% Programa: Interface com usuÃ¡rio para execuÃ§Ã£o de funÃ§Ãµes para o braÃ§o
+%           robÃ³tico Cyton Alpha 7D1G
+%           ComunicaÃ§Ã£o com Arduino
 
 clear all
 clc
@@ -35,7 +35,12 @@ while (in < 9)
     %=========== Connection =============
     
     if in == 0
+        % Windows
         arduino = serial('COM9','BaudRate',9600);
+
+        % Linux        
+        %arduino = serial('/dev/ttyUSB0','BaudRate',9600);     % sudo chmod 777 /dev/ttyUSB0
+
         fopen(arduino);
     end
     
