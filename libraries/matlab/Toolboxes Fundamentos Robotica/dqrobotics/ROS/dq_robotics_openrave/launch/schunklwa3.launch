@@ -1,0 +1,9 @@
+<launch>
+
+  <rosparam command="load" file="$(find dq_robotics_openrave)/config/schunklwa3.yaml" />
+
+  <node pkg="dq_robotics_openrave" type="robot_server.py" name="robot_server" />
+  <node pkg="dq_robotics_openrave" type="robot_client.py" name="robot_client" />
+
+</launch>
+

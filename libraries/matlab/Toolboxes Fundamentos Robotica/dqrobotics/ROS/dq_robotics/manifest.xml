@@ -1,0 +1,17 @@
+<package>
+  <description brief="dq_robotics">
+
+     dq_robotics
+
+  </description>
+  <author>Murilo Marinho</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/dq_robotics</url>
+  <export>
+    <cpp cflags="-I${prefix}/include -I${prefix}/include/dq_robotics" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -ldq_robotics"/>
+  </export>
+
+</package>
+
+

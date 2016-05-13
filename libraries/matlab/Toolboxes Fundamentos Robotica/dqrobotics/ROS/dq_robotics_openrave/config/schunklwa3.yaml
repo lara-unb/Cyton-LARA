@@ -1,0 +1,7 @@
+/robot/name: schunklwa3
+/robot/dofs: 7
+
+/node/samplerate: 10
+
+/openrave/environment/filename: schunklwa3_simulation.env.xml
+

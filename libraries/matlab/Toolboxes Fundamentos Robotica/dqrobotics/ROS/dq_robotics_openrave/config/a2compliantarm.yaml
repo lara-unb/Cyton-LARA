@@ -1,0 +1,7 @@
+/robot/name: a2compliantarm
+/robot/dofs: 7
+
+/node/samplerate: 10
+
+/openrave/environment/filename: a2compliantarm_simulation.env.xml
+

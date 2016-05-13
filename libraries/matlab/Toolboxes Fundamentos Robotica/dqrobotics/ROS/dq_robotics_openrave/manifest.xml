@@ -1,0 +1,17 @@
+<package>
+  <description brief="dq_robotics_openrave">
+
+     dq_robotics_openrave
+
+  </description>
+  <author>clara</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/dq_robotics_openrave</url>
+  <depend package="roscpp"/>
+  <depend package="rospy" />
+  <depend package="openraveros"/>
+
+</package>
+
+
