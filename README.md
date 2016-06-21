@@ -31,12 +31,12 @@ The Cyton C++ API provided by Robai is a good way to program the arm, however, a
 ## Matlab
 The Matlab is mainly used to calculate the Forward Kinematics of the arm, as the Arduino is not powerful enough to do so. Also, it is used to present the User Interface with a Menu with some options.
 
-## Arduino Libraries Required
+## Required Arduino Libraries
 1. SSC32: http://blog.martinperis.com/2011/05/libssc32-arduino-ssc32.html
 2. Filters: https://github.com/JonHub/Filters
 3. StandardCplusplus: https://github.com/maniacbug/StandardCplusplus
 
-## Maltab Toolbox Required
+## Required Maltab Toolbox
 1. DQ Robotics: http://dqrobotics.sourceforge.net/
 
 ## DH Parameters
