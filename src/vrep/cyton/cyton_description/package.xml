@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+    <name>cyton_description</name>
+    <version>0.0.0</version>
+    <description>This package contains Cyton robot description files</description>
+
+    <maintainer email="waldezjr14@gmail.com">Waldez Junior</maintainer>
+    <maintainer email="gabriel.araujo.5000@gmail.com">Gabriel Araujo</maintainer>
+
+    <license>BSD</license>
+
+    <author email="waldezjr14@gmail.com">Waldez Junior</author>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <export>
+    </export>
+</package>

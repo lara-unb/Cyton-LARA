@@ -1,0 +1,32 @@
+digraph G {
+node [shape=box];
+"link0" [label="link0"];
+"link1" [label="link1"];
+"link2" [label="link2"];
+"link3" [label="link3"];
+"link4" [label="link4"];
+"link5" [label="link5"];
+"link6" [label="link6"];
+"link7" [label="link7"];
+"claw2" [label="claw2"];
+"claw1" [label="claw1"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"link0" -> "shoulder_base" [label="xyz: 0.099 -0.071 0.0845 \nrpy: 1.5708 -0 -3.141"]
+"shoulder_base" -> "link1"
+"link1" -> "shoulder_pitch" [label="xyz: 0 0.0355 0 \nrpy: -3.14159 -1.568 -3.14159"]
+"shoulder_pitch" -> "link2"
+"link2" -> "shoulder_yaw" [label="xyz: 0.008 0.1065 0 \nrpy: 0 4.1059e-05 0"]
+"shoulder_yaw" -> "link3"
+"link3" -> "elbow_pitch" [label="xyz: 0 0.06745 0 \nrpy: 0 -4.996e-14 0"]
+"elbow_pitch" -> "link4"
+"link4" -> "wrist_roll" [label="xyz: 0.0015 0.0875 0 \nrpy: -3.14159 0.0004604 -3.14159"]
+"wrist_roll" -> "link5"
+"link5" -> "wrist_yaw" [label="xyz: 0 0.06995 0 \nrpy: 3.14159 1.57079 3.14159"]
+"wrist_yaw" -> "link6"
+"link6" -> "wrist_pitch" [label="xyz: 0 0.06645 0.00775 \nrpy: 0 -3.4333e-11 0"]
+"wrist_pitch" -> "link7"
+"link7" -> "claw_left" [label="xyz: -0.0091826 0.0555 0 \nrpy: -3.14159 4.6484e-13 -3.14159"]
+"claw_left" -> "claw2"
+"link7" -> "claw_right" [label="xyz: -0.0091826 0.0555 0 \nrpy: 0 0.0026969 0"]
+"claw_right" -> "claw1"
+}

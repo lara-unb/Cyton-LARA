@@ -1,0 +1,792 @@
+<?xml version="1.0"?>
+<robot>
+  <link
+    name="link0">
+    <inertial>
+      <origin
+        xyz="0.093366 0.03803 0.065977"
+        rpy="0 0 0" />
+      <mass
+        value="0.40583" />
+      <inertia
+        ixx="0.00082976"
+        ixy="8.1234E-05"
+        ixz="-1.1485E-05"
+        iyy="0.0010372"
+        iyz="2.8245E-06"
+        izz="0.00086815" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link0.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link0.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link0">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="-0.0045279 0.015309 0.0058769"
+        rpy="0 0 0" />
+      <mass
+        value="0.17897" />
+      <inertia
+        ixx="0.00040944"
+        ixy="-1.2113E-05"
+        ixz="-6.3351E-06"
+        iyy="0.00049769"
+        iyz="1.5436E-05"
+        izz="0.00017854" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link1">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="shoulder_base"
+    type="revolute">
+    <origin
+      xyz="0.099 -0.071 0.0845"
+      rpy="1.5708 -3.382E-20 -3.141" />
+    <parent
+      link="link0" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="2.42"
+      velocity="7.48" />
+	<dynamics fricction="0" damping="0" />
+  </joint>
+ <gazebo reference="shoulder_base">
+    <erp>0.1</erp>
+    <stopKd value="100000000.0" />
+    <stopKp value="100000000.0" />
+    <fudgeFactor value="0.5" />
+ </gazebo>
+  <link
+    name="link2">
+    <inertial>
+      <origin
+        xyz="-0.0065594 0.081209 -2.1283E-10"
+        rpy="0 0 0" />
+      <mass
+        value="0.17025" />
+      <inertia
+        ixx="0.00016239"
+        ixy="2.4141E-05"
+        ixz="1.9315E-12"
+        iyy="0.00012941"
+        iyz="-3.7242E-13"
+        izz="0.00024238" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link2">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="shoulder_pitch"
+    type="revolute">
+    <origin
+      xyz="0 0.0355 0"
+      rpy="3.1416 -1.568 3.1416" />
+    <parent
+      link="link1" />
+    <child
+      link="link2" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.4835"
+      upper="1.4835"
+      effort="5.88"
+      velocity="6.16" />
+	<dynamics fricction="0" damping="0" />
+
+  </joint>
+ <gazebo reference="shoulder_pitch">
+    <erp>0.8</erp>
+   <cfm>0.8</cfm>
+    <stopKd value="10000000000.0" />
+    <stopKp value="10000000000.0" />
+    <fudgeFactor value="0" />
+    <provideFeedback value="true"/>
+ </gazebo>
+  <link
+    name="link3">
+    <inertial>
+      <origin
+        xyz="-0.0037056 0.037257 4.318E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.074076" />
+      <inertia
+        ixx="4.9764E-05"
+        ixy="-4.2562E-06"
+        ixz="1.1853E-09"
+        iyy="1.9187E-05"
+        iyz="-5.6798E-09"
+        izz="5.8759E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link3">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+		<selfCollide>true</selfCollide>
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="shoulder_yaw"
+    type="revolute">
+    <origin
+      xyz="0.008 0.1065 0"
+      rpy="0 4.1059E-05 0" />
+    <parent
+      link="link2" />
+    <child
+      link="link3" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="2.42"
+      velocity="3.74" />
+	<dynamics fricction="0" damping="0" />
+  </joint>
+ <gazebo reference="shoulder_yaw">
+    <erp>0.1</erp>
+    <stopKd value="100000000.0" />
+    <stopKp value="100000000.0" />
+    <fudgeFactor value="7.08" />
+ </gazebo>
+  <link
+    name="link4">
+    <inertial>
+      <origin
+        xyz="-0.00453034281205507 0.0720346348332056 -1.35437425163865E-09"
+        rpy="0 0 0" />
+      <mass
+        value="0.0672668972309732" />
+      <inertia
+        ixx="4.67161199119564E-05"
+        ixy="4.35195121344976E-06"
+        ixz="2.6302026822635E-12"
+        iyy="3.13979422559928E-05"
+        iyz="-6.86584027007207E-13"
+        izz="6.48051352457449E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link4">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+		<selfCollide>true</selfCollide>
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="elbow_pitch"
+    type="revolute">
+    <origin
+      xyz="0 0.06745 0"
+      rpy="0 -4.996E-14 0" />
+    <parent
+      link="link3" />
+    <child
+      link="link4" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.4835"
+      upper="1.4835"
+      effort="2.94"
+      velocity="6.16" />
+	<dynamics fricction="0" damping="0" />
+
+  </joint>
+ <gazebo reference="elbow_pitch">
+    <erp>0.1</erp>
+    <stopKd value="100000000.0" />
+    <stopKp value="100000000.0" />
+    <fudgeFactor value="0.5" />
+ </gazebo>
+  <link
+    name="link5">
+    <inertial>
+      <origin
+        xyz="0.00456829669603721 0.0474224526162388 -3.47375755178903E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.051376442823963" />
+      <inertia
+        ixx="3.2737957509832E-05"
+        ixy="3.31712748307281E-06"
+        ixz="-1.90627017301039E-09"
+        iyy="9.92504658091435E-06"
+        iyz="-2.25609756305602E-09"
+        izz="3.78510108258027E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link5.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link5">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+		<selfCollide>true</selfCollide>
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="wrist_roll"
+    type="revolute">
+    <origin
+      xyz="0.0015 0.0875 0"
+      rpy="3.1416 0.0004604 3.1416" />
+    <parent
+      link="link4" />
+    <child
+      link="link5" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0.54"
+      velocity="5.8177" />
+	<dynamics fricction="0" damping="0" />
+  </joint>
+ <gazebo reference="wrist_roll">
+    <erp>0.1</erp>
+    <stopKd value="100000000.0" />
+    <stopKp value="100000000.0" />
+    <fudgeFactor value="0.5" />
+ </gazebo>
+  <link
+    name="link6">
+    <inertial>
+      <origin
+        xyz="-0.0052229 0.050156 0.0077539"
+        rpy="0 0 0" />
+      <mass
+        value="0.045233" />
+      <inertia
+        ixx="2.1686E-05"
+        ixy="-1.8794E-06"
+        ixz="-1.7894E-09"
+        iyy="1.2099E-05"
+        iyz="1.1437E-09"
+        izz="2.358E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link6.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link6">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+		<selfCollide>true</selfCollide>
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="wrist_yaw"
+    type="revolute">
+    <origin
+      xyz="0 0.06995 0"
+      rpy="0 1.5708 0" />
+    <parent
+      link="link5" />
+    <child
+      link="link6" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.1345"
+      upper="1.1345"
+      effort="0.54"
+      velocity="5.8177" />
+	<dynamics fricction="0" damping="0" />
+  </joint>
+ <gazebo reference="wrist_yaw">
+    <erp>0.1</erp>
+    <stopKd value="100000000.0" />
+    <stopKp value="100000000.0" />
+    <fudgeFactor value="0.5" />
+ </gazebo>
+  <link
+    name="link7">
+    <inertial>
+      <origin
+        xyz="-0.016212 0.037635 0.009234"
+        rpy="0 0 0" />
+      <mass
+        value="0.04349" />
+      <inertia
+        ixx="1.1991E-05"
+        ixy="-9.3011E-07"
+        ixz="-1.5295E-06"
+        iyy="1.7894E-05"
+        iyz="1.1506E-06"
+        izz="1.6777E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link7.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/link7.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="link7">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+		<selfCollide>true</selfCollide>
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="wrist_pitch"
+    type="revolute">
+    <origin
+      xyz="0 0.06645 0.00775"
+      rpy="0 -3.4333E-11 0" />
+    <parent
+      link="link6" />
+    <child
+      link="link7" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-1.1781"
+      upper="1.1781"
+      effort="0.54"
+      velocity="5.8177" />
+	<dynamics fricction="0" damping="0" />
+  </joint>
+ <gazebo reference="wrist_pitch">
+    <erp>0.1</erp>
+    <stopKd value="100000000.0" />
+    <stopKp value="100000000.0" />
+    <fudgeFactor value="0.5" />
+ </gazebo>
+  <link
+    name="claw1">
+    <inertial>
+      <origin
+        xyz="0.0052069 0.010995 1.4043E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.0052092" />
+      <inertia
+        ixx="5.9848E-07"
+        ixy="-4.9952E-08"
+        ixz="-3.3858E-10"
+        iyy="2.5868E-07"
+        iyz="-1.3472E-10"
+        izz="4.7294E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/claw1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/claw1.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="claw1">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+		<selfCollide>true</selfCollide>
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="claw_right"
+    type="prismatic">
+    <origin
+      xyz="-0.0091826 0.0555 0"
+      rpy="0 0.0026969 0" />
+    <parent
+      link="link7" />
+    <child
+      link="claw1" />
+    <axis
+      xyz="1 0 0.0026969" />
+    <limit
+      lower="0"
+      upper="0.017"
+      effort="5.5"
+      velocity="0.017" />
+	<dynamics fricction="0" damping="0" />
+  </joint>
+  <link
+    name="claw2">
+    <inertial>
+      <origin
+        xyz="0.0053418 0.010995 -8.0075E-14"
+        rpy="0 0 0" />
+      <mass
+        value="0.0052092" />
+      <inertia
+        ixx="5.9848E-07"
+        ixy="-4.9952E-08"
+        ixz="5.8306E-20"
+        iyy="2.5868E-07"
+        iyz="2.3368E-20"
+        izz="4.7294E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/claw2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://cyton_description/meshes/claw2.STL" />
+      </geometry>
+    </collision>
+  </link>
+	<gazebo reference="claw2">
+		<material value="Gazebo/BlueGlow"/>
+		<mu1>100</mu1>
+		<mu2>100</mu2>
+		<kp>100000000000</kp>
+		<kd>1000000000</kd>
+		<selfCollide>true</selfCollide>
+		<turnGravityOff>false</turnGravityOff> 
+	</gazebo>
+  <joint
+    name="claw_left"
+    type="prismatic">
+    <origin
+      xyz="-0.0091826 0.0555 0"
+      rpy="3.1416 4.6484E-13 3.1416" />
+    <parent
+      link="link7" />
+    <child
+      link="claw2" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.017"
+      upper="0"
+      effort="5.5"
+      velocity="0.017" />
+	<dynamics fricction="0" damping="0" />
+  </joint>
+
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+
+  </plugin>
+</gazebo>
+
+  <transmission name="shoulder_base_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="shoulder_base"/>
+    <actuator name="shoulder_base_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="shoulder_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="shoulder_pitch"/>
+    <actuator name="shoulder_pitch_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="shoulder_yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="shoulder_yaw"/>
+    <actuator name="shoulder_yaw_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  
+  <transmission name="elbow_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="elbow_pitch"/>
+    <actuator name="elbow_pitch_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="wrist_roll_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wrist_roll"/>
+    <actuator name="wrist_roll_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="wrist_yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wrist_yaw"/>
+    <actuator name="wrist_yaw_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="wrist_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wrist_pitch"/>
+    <actuator name="wrist_pitch_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="claw_left_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="claw_left"/>
+    <actuator name="claw_left_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="claw_right_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="claw_right"/>
+    <actuator name="claw_right_motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>
