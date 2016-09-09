@@ -5,7 +5,8 @@
  * Programa: Recebe diversos comandos eviados do Matlab e as executa enviando 
  *           comandos via serial para o manipulador Cyton Alpha 7D1G
  */
- 
+
+
 #include <SSC32.h>
 
 #include <StandardCplusplus.h>
@@ -17,10 +18,19 @@
 #include <string>
 #include <vector>
 #include <iterator>
+
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
+#include <std_msgs/String.h>
+
+#define LED 13
+#define TIME_BLINK 200
 
 using namespace std;
+
+namespace std {
+  ohserialstream cout(Serial);
+}
 
 //=========================== Variaveis =================================
 
@@ -29,29 +39,27 @@ float erro = 0.0, servoPosicaoMap = 0.0;
 int count, k, duration;
 vector <float> angles_ref;
 vector <float> angles_feedback;
+double joint_angles[7];
 vector <float> ang0;vector <float> ang1;vector <float> ang2;vector <float> ang3;vector <float> ang4;vector <float> ang5;vector <float> ang6;
 vector <float> ang;
 
 // Minimo e Maximo em Volts
-float min_array[] = {2.72, 0.7, 2.7, 4.06, 2.7, 2.7, 2.75, 2.69};
-float max_array[] = {0.75, 4.26, 0.75, 0.45, 0.63, 0.63, 0.6, 0.69};
+const float min_array[] = {2.72, 0.7, 2.7, 4.06, 2.7, 2.7, 2.75, 2.69};
+const float max_array[] = {0.75, 4.26, 0.75, 0.45, 0.63, 0.63, 0.6, 0.69};
 
 // Minimo e Maximo do Servo
-float min_array2[] = {2330, 2320, 2350, 800, 2370, 2300, 2370};
-float max_array2[] = {720, 920, 730, 2100, 610, 600, 580};
-float min_degree[] = {-90,-86, -90, -83, -90, -90,-90};
-float max_degree[] = {90, 65, 90, 62, 90, 90, 90};
-
-// Inputs
-int servoPin = 6, servoPosicao, Input;
-
-float Setpoint, Output;
+const float min_array2[] = {2330, 2320, 2350, 800, 2370, 2300, 2370};
+const float max_array2[] = {720, 920, 730, 2100, 610, 600, 580};
+const float min_degree[] = {-90,-86, -90, -83, -90, -90,-90};
+const float max_degree[] = {90, 65, 90, 62, 90, 90, 90};
 
 // ROS
 ros::NodeHandle  nh;
 sensor_msgs::JointState joint_msg;
 ros::Publisher arduinoControler("/Cython/jointAngles", &joint_msg);
 
+// Servo Motors Controler
+SSC32 myssc = SSC32();
 
 //============= Classes ============================================
 
@@ -109,13 +117,6 @@ PID servoPID0(-0.1, 0.005, 0.0005);PID servoPID1(-0.1, 0.005, 0.0005);PID servoP
 PID servoPID3(-0.1, 0.005, 0.0005);PID servoPID4(-0.1, 0.005, 0.0005);PID servoPID5(-0.1, 0.005, 0.0005);
 PID servoPID6(-0.1, 0.005, 0.0005);
 
-namespace std {
-  ohserialstream cout(Serial);
-}
-
-
-SSC32 myssc = SSC32();
-
 //=============== Funções =========================================
 
 // Funcao de Mapaeamento de variavel float
@@ -123,21 +124,6 @@ float mapfloat(float x, float in_min, float in_max, float out_min, float out_max
   
   return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
  
-}
-
-// Leitura de String da Serial
-String readSerial() {
-  String inData = "";
-  if (Serial.available() > 0) {
-    int h = Serial.available();
-    for (int i = 0; i < h; i++) {
-      inData += (char)Serial.read();
-    }
-    return inData;
-  }
-  else {
-    return "No connection";
-  }
 }
 
 // Leitura de posicao dos servos
@@ -177,31 +163,6 @@ void setMultServos(vector <float> angles, int dt){
   delay(100);
 }
 
-// Controle PID
-void PIDControl(vector <float> angles_float, vector <float> feedback){ 
-  vector <float> pidOut;  
-  
-  // Setpoint
-  servoPID0.setSetPoint(angles_float[0]);servoPID1.setSetPoint(angles_float[1]);servoPID2.setSetPoint(angles_float[2]);
-  servoPID3.setSetPoint(angles_float[3]);servoPID4.setSetPoint(angles_float[4]);servoPID5.setSetPoint(angles_float[5]);
-  servoPID6.setSetPoint(angles_float[6]);
-
-  // Sample
-  servoPID0.addNewSample(feedback[0]);servoPID1.addNewSample(feedback[1]);servoPID2.addNewSample(feedback[2]);
-  servoPID3.addNewSample(feedback[3]);servoPID4.addNewSample(feedback[4]);servoPID5.addNewSample(feedback[5]);
-  servoPID6.addNewSample(feedback[6]);
-
-  // Process
-  pidOut.push_back(servoPID0.process());pidOut.push_back(servoPID1.process());pidOut.push_back(servoPID2.process());
-  pidOut.push_back(servoPID3.process());pidOut.push_back(servoPID4.process());pidOut.push_back(servoPID5.process());
-  pidOut.push_back(servoPID6.process());
-
-  // Compensation
-  duration = 700;
-  setMultServos(pidOut, duration);
-    
-}
-
 // Função que lê a string de angulos da serial e a tranforma em vetor de angulos float
 vector <float> ReadAngles(){
   
@@ -236,6 +197,7 @@ void SetInitialPosition(){
   duration = 2000;
 
   myssc.beginGroupCommand(SSC32_CMDGRP_TYPE_SERVO_MOVEMENT);
+  
   value = mapfloat(0, min_degree[0], max_degree[0], min_array2[0], max_array2[0]);
   myssc.servoMoveTime(0, value, duration);
   value = mapfloat(0, min_degree[1], max_degree[1], min_array2[1], max_array2[1]);
@@ -250,56 +212,64 @@ void SetInitialPosition(){
   myssc.servoMoveTime(5, value, duration);
   value = mapfloat(0, min_degree[6], max_degree[6], min_array2[6], max_array2[6]);
   myssc.servoMoveTime(6, value, duration);
-//  value = mapfloat(0, min_array[7], max_array[7], -90, 90);
-//  myssc.servoMoveTime(7,value,3000);
+
   myssc.endGroupCommand();
   
   delay(2000);
 
 }
 
+/**
+ * Debug Function - Blink Led 'n' times
+ * @author Rafael
+ */
+void blink(int n){
+  for(k=(n>=0)?0:n;k<n;k++){
+    digitalWrite(LED,HIGH);
+    delay(TIME_BLINK);
+    digitalWrite(LED,LOW);
+    delay(TIME_BLINK);
+  }
+}
+
 //============== Setup ===========================================
 
 void setup() {
+  // Set LED for debug
+  pinMode(LED, OUTPUT);
+  digitalWrite(LED,LOW);
+  
   // Start Comunication with Servo Motors
   myssc.begin(9600);
-  Serial.setTimeout(4000);
+  Serial1.setTimeout(4000);
   
-  analogReference(EXTERNAL);  // Ligar porta AREF em 3.3V -> Aumenta resolução
-
-  // Set all Angles to zero
-  ang0.push_back(999);ang1.push_back(0.0);ang2.push_back(0.0);
-  ang3.push_back(0.0);ang4.push_back(0.0);ang5.push_back(0.0);
-  ang6.push_back(0.0);
+  //analogReference(EXTERNAL);  // Ligar porta AREF em 3.3V -> Aumenta resolução
 
   // Move Robot to Zero Position
   SetInitialPosition();
+  angles_feedback = Feedback();
+
+  blink(2);
 
   // Start ROS Node
   nh.initNode();
   nh.advertise(arduinoControler);
+  nh.spinOnce();
+
+  joint_msg.position_length = 7;
+  joint_msg.st_position = 0;
+  joint_msg.position = &angles_feedback[0];
+
+  blink(3);
 }
 
 //=============== Loop ============================================
 
 void loop() {
-  // Move Robot to Zero Position
-//  SetInitialPosition();
-  
   // Feedback
   angles_feedback = Feedback();
 
-  // Print Joint Angles
-  for (k = 0; k < 7; k++){
-     joint_msg.position[k] = angles_feedback[k];
-     if (k == 3){
-       //Serial.println(angles_feedback[k]);
-       joint_msg.position[k] = angles_feedback[k];
-       joint_msg.position[k] = 0.12345;
-     }else{
-        //Serial.print(angles_feedback[k]); Serial.print(' ');
-     }
-  }
+  joint_msg.position = &angles_feedback[0];
 
   // Send Msg to ROS
   arduinoControler.publish( &joint_msg );

@@ -292,7 +292,7 @@ void Record(){
 void setup() {
   // Start Comunication with Servo Motors
   myssc.begin(9600);
-  Serial.setTimeout(4000);
+  Serial.begin(9600);
   
   analogReference(EXTERNAL);  // Ligar porta AREF em 3.3V -> Aumenta resolução
 
@@ -308,14 +308,13 @@ void setup() {
 //=============== Loop ============================================
 
 void loop() {
-  
   // Feedback
   angles_feedback = Feedback();
 
   // Print Joint Angles
   for (k = 0; k < 7; k++){
      if (k == 6){
-       Serial.println(angles_feedback[k]);
+        Serial.println(angles_feedback[k]);
      }else{
         Serial.print(angles_feedback[k]);
         Serial.print(' ');
