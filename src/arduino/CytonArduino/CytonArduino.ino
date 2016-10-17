@@ -112,6 +112,7 @@ SSC32 myssc = SSC32();
 
 void setup() {
   myssc.begin(9600);
+  Serial.begin(9600);
   analogReference(EXTERNAL);  // Ligar porta AREF em 3.3V -> Aumenta resolução
   Serial.setTimeout(4000);
   

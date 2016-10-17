@@ -321,6 +321,9 @@ void loop() {
      }
   }
 
+  // Move Robot to Zero Position
+  SetInitialPosition();
+
   delay(10);
 }
 
