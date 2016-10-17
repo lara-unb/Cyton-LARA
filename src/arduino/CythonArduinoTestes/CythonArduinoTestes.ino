@@ -1,13 +1,11 @@
 /** 
  * Universidade de Brasília
- * Laboratório de Automação e Robótica - LARA
- *
+ * Laboratório de Automação e Robótica
+ * @authors De Hong Jung , Rafael Lima
  * Programa: Recebe diversos comandos eviados do Matlab e as executa enviando 
  *           comandos via serial para o manipulador Cyton Alpha 7D1G
- *
- * @authors De Hong Jung , Rafael Lima
  */
-
+ 
 #include <SSC32.h>
 
 #include <StandardCplusplus.h>
@@ -20,8 +18,6 @@
 #include <vector>
 #include <iterator>
 
-#include <elapsedMillis.h>
-
 using namespace std;
 
 //=========================== Variaveis =================================
@@ -31,7 +27,8 @@ float erro = 0.0, servoPosicaoMap = 0.0;
 int count, k, duration;
 vector <float> angles_ref;
 vector <float> angles_feedback;
-vector <float> angles_cmd;
+vector <float> ang0;vector <float> ang1;vector <float> ang2;vector <float> ang3;vector <float> ang4;vector <float> ang5;vector <float> ang6;
+vector <float> ang;
 
 // Minimo e Maximo em Volts
 float min_array[] = {2.72, 0.7, 2.7, 4.06, 2.7, 2.7, 2.75, 2.69};
@@ -48,17 +45,68 @@ int servoPin = 6, servoPosicao, Input;
 
 float Setpoint, Output;
 
-// Time
-elapsedMillis timeElapsed;
-
-// Servo Motors Controler
-SSC32 myssc = SSC32();
-
 //============= Classes ============================================
+
+class PID{
+public:
+  
+  float error;
+  float sample;
+  float lastSample;
+  float kP, kI, kD;      
+  float P, I, D;
+  float pid;
+  
+  float setPoint;
+  float lastProcess;
+  
+  PID(float _kP, float _kI, float _kD){
+    kP = _kP;
+    kI = _kI;
+    kD = _kD;
+  }
+  
+  void addNewSample(float _sample){
+    sample = _sample;
+  }
+  
+  void setSetPoint(float _setPoint){
+    setPoint = _setPoint;
+  }
+  
+  float process(){
+    // Implementação P ID
+    error = setPoint - sample;
+    float deltaTime = (millis() - lastProcess) / 1000.0;
+    lastProcess = millis();
+    
+    //P
+    P = error * kP;
+    
+    //I
+    I = I + (error * kI) * deltaTime;
+    
+    //D
+    D = (lastSample - sample) * kD / deltaTime;
+    lastSample = sample;
+    
+    // Soma tudo
+    pid = P + I + D;
+    
+    return pid;
+  }
+};
+
+PID servoPID0(-0.1, 0.005, 0.0005);PID servoPID1(-0.1, 0.005, 0.0005);PID servoPID2(-0.1, 0.005, 0.0005);
+PID servoPID3(-0.1, 0.005, 0.0005);PID servoPID4(-0.1, 0.005, 0.0005);PID servoPID5(-0.1, 0.005, 0.0005);
+PID servoPID6(-0.1, 0.005, 0.0005);
 
 namespace std {
   ohserialstream cout(Serial);
 }
+
+
+SSC32 myssc = SSC32();
 
 //=============== Funções =========================================
 
@@ -121,6 +169,30 @@ void setMultServos(vector <float> angles, int dt){
   delay(100);
 }
 
+// Controle PID
+void PIDControl(vector <float> angles_float, vector <float> feedback){ 
+  vector <float> pidOut;  
+  
+  // Setpoint
+  servoPID0.setSetPoint(angles_float[0]);servoPID1.setSetPoint(angles_float[1]);servoPID2.setSetPoint(angles_float[2]);
+  servoPID3.setSetPoint(angles_float[3]);servoPID4.setSetPoint(angles_float[4]);servoPID5.setSetPoint(angles_float[5]);
+  servoPID6.setSetPoint(angles_float[6]);
+
+  // Sample
+  servoPID0.addNewSample(feedback[0]);servoPID1.addNewSample(feedback[1]);servoPID2.addNewSample(feedback[2]);
+  servoPID3.addNewSample(feedback[3]);servoPID4.addNewSample(feedback[4]);servoPID5.addNewSample(feedback[5]);
+  servoPID6.addNewSample(feedback[6]);
+
+  // Process
+  pidOut.push_back(servoPID0.process());pidOut.push_back(servoPID1.process());pidOut.push_back(servoPID2.process());
+  pidOut.push_back(servoPID3.process());pidOut.push_back(servoPID4.process());pidOut.push_back(servoPID5.process());
+  pidOut.push_back(servoPID6.process());
+
+  // Compensation
+  duration = 700;
+  setMultServos(pidOut, duration);
+    
+}
 
 // Função que lê a string de angulos da serial e a tranforma em vetor de angulos float
 vector <float> ReadAngles(){
@@ -178,74 +250,80 @@ void SetInitialPosition(){
 
 }
 
+void Replay(){
+    vector <float> angles;
+    angles.push_back(0.0);
+    
+    for (int i = 0; i < ang0.size(); i++){
+      angles.clear();
+      angles.push_back(ang0[i]);angles.push_back(ang1[i]);angles.push_back(ang2[i]);
+      angles.push_back(ang3[i]);angles.push_back(ang4[i]);angles.push_back(ang5[i]);
+      angles.push_back(ang6[i]);
+
+      duration = 500;
+      setMultServos(angles, duration);
+      delay(400);
+    }
+}
+
+void Record(){
+    int dt = 400;
+    ang0.clear();ang1.clear();ang2.clear();
+    ang3.clear();ang4.clear();ang5.clear();
+    ang6.clear();
+    
+    while (!Serial.available()){
+        angles_ref.clear();
+        angles_ref = Feedback();
+        ang0.push_back(angles_ref[0]);ang1.push_back(angles_ref[1]);ang2.push_back(angles_ref[2]);
+        ang3.push_back(angles_ref[3]);ang4.push_back(angles_ref[4]);ang5.push_back(angles_ref[5]);
+        ang6.push_back(angles_ref[6]);
+        Serial.print(angles_ref[0]); Serial.print(' ');Serial.print(angles_ref[1]); Serial.print(' ');Serial.print(angles_ref[2]); Serial.print(' ');Serial.print(angles_ref[3]); Serial.print(' ');
+        Serial.print(angles_ref[4]); Serial.print(' ');Serial.print(angles_ref[5]); Serial.print(' ');Serial.println(angles_ref[6]);
+        delay(dt);
+    }
+    Input = Serial.parseInt();
+
+    delay(1000);
+}
+
 //============== Setup ===========================================
 
 void setup() {
-  // Start Comunication 
-  myssc.begin(9600);  // Servo Motors (Serial1)
-  Serial.begin(9600); // Computer
+  // Start Comunication with Servo Motors
+  myssc.begin(9600);
+  Serial.begin(9600);
   
   analogReference(EXTERNAL);  // Ligar porta AREF em 3.3V -> Aumenta resolução
-  
-  // Set angles to zero
-  for (k = 0; k < 7; k++)
-    angles_cmd[k] = 0;
 
-  // Move Gently Robot to Zero Position
+  // Set all Angles to zero
+  ang0.push_back(999);ang1.push_back(0.0);ang2.push_back(0.0);
+  ang3.push_back(0.0);ang4.push_back(0.0);ang5.push_back(0.0);
+  ang6.push_back(0.0);
+
+  // Move Robot to Zero Position
   SetInitialPosition();
-
-  // Set time to zero
-  timeElapsed = 0;
-}
-
-void printAngles(){
-
 }
 
 //=============== Loop ============================================
 
 void loop() {
-
-  /////// Read Input ///////
-  
   // Feedback
   angles_feedback = Feedback();
 
-  // Print Time Stamp
-  Serial.print('R ');
-  Serial.print(timeElapsed);
-  Serial.print(' ');
-  // Print Current Joint Angles
-  for (k = 0; k < 6; k++){
-    Serial.print(angles_feedback[k]);
-    Serial.print(' ');
+  // Print Joint Angles
+  for (k = 0; k < 7; k++){
+     if (k == 6){
+        Serial.println(angles_feedback[k]);
+     }else{
+        Serial.print(angles_feedback[k]);
+        Serial.print(' ');
+     }
   }
-  Serial.println(angles_feedback[k]);
 
-  //////// Command /////////
-
-  // Reset timer
-  timeElapsed = 0;
-
-  // Set Angles
-  for (k = 0; k < 7; k++)
-    angles_cmd[k] = 0;
-
-  // Print Command Angles
-  Serial.print('C');
-  Serial.print(timeElapsed);
-  Serial.print(' ');
-  for (k = 0; k < 6; k++){
-    Serial.print(angles_cmd[k]);
-    Serial.print(' ');
-  }
-  Serial.println(angles_cmd[k]);
-
-  //////// Actuation /////////
-
-  // Send Servo command
-  //setMultServos(angles_cmd,1000);
-  //delay(1000);
+  // Move Robot to Zero Position
   SetInitialPosition();
+
+  delay(10);
 }
 
