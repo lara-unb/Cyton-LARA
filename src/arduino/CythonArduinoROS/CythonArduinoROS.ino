@@ -2,7 +2,7 @@
  * Universidade de Brasília
  * Laboratório de Automação e Robótica
  * @authors De Hong Jung , Rafael Lima
- * Programa: Recebe diversos comandos eviados do Matlab e as executa enviando 
+ * Programa: Recebe diversos comandos eviados do ROS e as executa enviando 
  *           comandos via serial para o manipulador Cyton Alpha 7D1G
  */
 
@@ -22,6 +22,7 @@
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/String.h>
+#include <std_msgs/Empty.h>
 
 #define LED 13
 #define TIME_BLINK 200
@@ -41,7 +42,7 @@ vector <float> angles_ref;
 vector <float> angles_feedback;
 double joint_angles[7];
 vector <float> ang0;vector <float> ang1;vector <float> ang2;vector <float> ang3;vector <float> ang4;vector <float> ang5;vector <float> ang6;
-vector <float> ang;
+vector <float> angles_cmd;
 
 // Minimo e Maximo em Volts
 const float min_array[] = {2.72, 0.7, 2.7, 4.06, 2.7, 2.7, 2.75, 2.69};
@@ -53,10 +54,31 @@ const float max_array2[] = {720, 920, 730, 2100, 610, 600, 580};
 const float min_degree[] = {-90,-86, -90, -83, -90, -90,-90};
 const float max_degree[] = {90, 65, 90, 62, 90, 90, 90};
 
+void messageCb( const std_msgs::Empty& toggle_msg){
+  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
+  angles_ref.clear();
+  for (int i = 0; i < 7; i++)
+    angles_ref.push_back(-1);
+}
+
+/**
+ * Callback to set reference angle
+ * @bug Callback not working
+ * @TODO fix this
+ */
+void motionCallback(const sensor_msgs::JointState& cmd_msg){
+  digitalWrite(13, HIGH-digitalRead(13));   // blink the led
+  angles_ref.clear();
+  for (int i = 0; i < 7; i++)
+    angles_ref.push_back(cmd_msg.position[i]);
+}
+
 // ROS
 ros::NodeHandle  nh;
 sensor_msgs::JointState joint_msg;
-ros::Publisher arduinoControler("/Cython/jointAngles", &joint_msg);
+ros::Publisher jointAnglesPub("/Cyton/jointAngles", &joint_msg);
+//ros::Subscriber<sensor_msgs::JointState> sub("/Cyton/jointCmd", &motionCallback);
+ros::Subscriber<std_msgs::Empty> sub("toggle_led", &messageCb );
 
 // Servo Motors Controler
 SSC32 myssc = SSC32();
@@ -119,26 +141,32 @@ PID servoPID6(-0.1, 0.005, 0.0005);
 
 //=============== Funções =========================================
 
-// Funcao de Mapaeamento de variavel float
+/**
+ * Funcao de Mapaeamento de variavel float
+ */
 float mapfloat(float x, float in_min, float in_max, float out_min, float out_max){
   
   return (float)(x - in_min) * (out_max - out_min) / (float)(in_max - in_min) + out_min;
  
 }
 
-// Leitura de posicao dos servos
+/**
+ * Leitura de posicao dos servos
+ */
 vector <float> Feedback(){
   vector <float> angles;
   
-  for (int i = 0; i < 7; i++){
-    value = analogRead(i)*(5.0/1023.0);
-    value = mapfloat(value, min_array[i], max_array[i], -90, 90);
+  for (k = 0; k < 7; k++){
+    value = analogRead(k)*(5.0/1023.0);
+    value = mapfloat(value, min_array[k], max_array[k], -90, 90);
     angles.push_back(value);
   }
   return angles;
 }
 
-// Funcao de move todos os servos a partir de um vetor de angulos (em graus)
+/** 
+ * Funcao de move todos os servos a partir de um vetor de angulos (em graus)
+ */
 void setMultServos(vector <float> angles, int dt){
   
   myssc.beginGroupCommand(SSC32_CMDGRP_TYPE_SERVO_MOVEMENT);
@@ -163,35 +191,9 @@ void setMultServos(vector <float> angles, int dt){
   delay(100);
 }
 
-// Função que lê a string de angulos da serial e a tranforma em vetor de angulos float
-vector <float> ReadAngles(){
-  
-  vector <float> angles_float;
-
-  angles_float.clear();
-  if (Serial.available()){
-    for (int i = 0; i < 7; i++)
-      angles_float.push_back(Serial.readStringUntil(' ').toFloat());  
-  }
-  return angles_float;
-}
-
-// Executa a Forward Kinematics a partir dos angulos das juntas enviadas do Matlab
-vector <float> FKM(){
-  
-  vector <float> angles_float;
-
-  angles_float = ReadAngles();
-  if (angles_float[0] == 999)
-    return angles_float;
-  else{
-    duration = 700;
-    setMultServos(angles_float, duration);
-    return angles_float;
-  }
-}
-
-// Funcao que inicializa todos os servos para posição 0 graus
+/**
+ * Funcao que inicializa todos os servos para posição 0 graus
+ */
 void SetInitialPosition(){
   
   duration = 2000;
@@ -224,7 +226,7 @@ void SetInitialPosition(){
  * @author Rafael
  */
 void blink(int n){
-  for(k=(n>=0)?0:n;k<n;k++){
+  for(k=(n>=0)?n:0;k<n;k++){
     digitalWrite(LED,HIGH);
     delay(TIME_BLINK);
     digitalWrite(LED,LOW);
@@ -241,19 +243,21 @@ void setup() {
   
   // Start Comunication with Servo Motors
   myssc.begin(9600);
-  Serial1.setTimeout(4000);
   
-  //analogReference(EXTERNAL);  // Ligar porta AREF em 3.3V -> Aumenta resolução
+  analogReference(EXTERNAL);  // Ligar porta AREF em 3.3V -> Aumenta resolução
 
   // Move Robot to Zero Position
   SetInitialPosition();
+  for (k = 0; k < 7; k++)
+    angles_ref[k] = 0;
   angles_feedback = Feedback();
 
   blink(2);
 
   // Start ROS Node
   nh.initNode();
-  nh.advertise(arduinoControler);
+  nh.advertise(jointAnglesPub);
+  nh.subscribe(sub);
   nh.spinOnce();
 
   joint_msg.position_length = 7;
@@ -269,12 +273,17 @@ void loop() {
   // Feedback
   angles_feedback = Feedback();
 
-  joint_msg.position = &angles_feedback[0];
+  joint_msg.header.stamp = nh.now(); // Get current time
+  //joint_msg.position = &angles_feedback[0];
+  joint_msg.position = &angles_ref[0];
 
   // Send Msg to ROS
-  arduinoControler.publish( &joint_msg );
+  jointAnglesPub.publish( &joint_msg );
   nh.spinOnce();
 
-  delay(10);
+  // Send Command to Servo
+  setMultServos(angles_ref,1000);
+
+  delay(100);
 }
 

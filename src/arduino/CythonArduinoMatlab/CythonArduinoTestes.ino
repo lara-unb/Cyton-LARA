@@ -365,7 +365,7 @@ void loop() {
   //////// Actuation /////////
 
   // Send Servo command
-  //setMultServos(angles_cmd,1000);
+  setMultServos(angles_cmd,1000);
   //delay(1000);
   SetInitialPosition();
 }
