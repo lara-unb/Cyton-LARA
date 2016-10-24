@@ -21,8 +21,9 @@
 
 #include <ros.h>
 #include <sensor_msgs/JointState.h>
-#include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
+//#include <std_msgs/Float32.h>
+#include <std_msgs/Float32MultiArray.h>
 
 #define LED 13
 #define TIME_BLINK 200
@@ -66,19 +67,19 @@ void messageCb( const std_msgs::Empty& toggle_msg){
  * @bug Callback not working
  * @TODO fix this
  */
-void motionCallback(const sensor_msgs::JointState& cmd_msg){
+void motionCallback(const std_msgs::Float32MultiArray& cmd_msg){
   digitalWrite(13, HIGH-digitalRead(13));   // blink the led
   angles_ref.clear();
   for (int i = 0; i < 7; i++)
-    angles_ref.push_back(cmd_msg.position[i]);
+    angles_ref.push_back(cmd_msg.data[i]);
 }
 
 // ROS
 ros::NodeHandle  nh;
 sensor_msgs::JointState joint_msg;
 ros::Publisher jointAnglesPub("/Cyton/jointAngles", &joint_msg);
-//ros::Subscriber<sensor_msgs::JointState> sub("/Cyton/jointCmd", &motionCallback);
-ros::Subscriber<std_msgs::Empty> sub("toggle_led", &messageCb );
+ros::Subscriber<std_msgs::Float32MultiArray> sub("/Cyton/jointCmd", &motionCallback);
+//ros::Subscriber<std_msgs::> sub("toggle_led", &messageCb );
 
 // Servo Motors Controler
 SSC32 myssc = SSC32();
@@ -274,8 +275,8 @@ void loop() {
   angles_feedback = Feedback();
 
   joint_msg.header.stamp = nh.now(); // Get current time
-  //joint_msg.position = &angles_feedback[0];
-  joint_msg.position = &angles_ref[0];
+  joint_msg.position = &angles_feedback[0];
+  //joint_msg.position = &angles_ref[0];
 
   // Send Msg to ROS
   jointAnglesPub.publish( &joint_msg );
