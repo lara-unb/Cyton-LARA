@@ -10,7 +10,7 @@ clc
 
 %============ Setup ================
 
-desired_theta = [0,0,0,-45,0,45,0]';
+desired_theta = [0,0,-45,-45,0,45,0]';
 feedback = ones(7,1);
 
 %========= User Interface ==========
@@ -36,10 +36,10 @@ while (in < 9)
     
     if in == 0
         % Windows
-        arduino = serial('COM9','BaudRate',9600);
+        %arduino = serial('COM9','BaudRate',9600);
 
         % Linux        
-        %arduino = serial('/dev/ttyUSB0','BaudRate',9600);     % sudo chmod 777 /dev/ttyUSB0
+        arduino = serial('/dev/ttyUSB0','BaudRate',9600);     % sudo chmod 777 /dev/ttyUSB0
 
         fopen(arduino);
     end

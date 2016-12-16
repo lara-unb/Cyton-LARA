@@ -5,6 +5,8 @@
 *	@date 5/2/2011
 *
 *	@change 27.10.2011 by Marco Schwarz <marco.schwarz@cioppino.net>
+*
+*   @change 3.7.2016 by Rafael Lima
 */
 
 /*
@@ -76,6 +78,8 @@
 #define SSC32_ANALOG_INPUT_VB 9
 #define SSC32_ANALOG_INPUT_VC 10
 #define SSC32_ANALOG_INPUT_VD 11
+
+#define SSC32_SERIAL Serial1
 
 class SSC32
 {

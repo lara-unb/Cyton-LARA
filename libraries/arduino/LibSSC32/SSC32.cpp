@@ -40,7 +40,7 @@
 #include "SSC32.h"
 
 /**
-*	Create an SSC32 object and initialize SoftwareSerial.
+*	Create an SSC32 object and initialize SoftwareSerial1.
 */
 SSC32::SSC32() 
 {
@@ -49,12 +49,12 @@ SSC32::SSC32()
 }
 
 /**
-*	Begin the serial port communications. Should be called inside the setup() function of the Arduino.
-*	@param bauds	The speed in bauds for the serial port
+*	Begin the Serial1 port communications. Should be called inside the setup() function of the Arduino.
+*	@param bauds	The speed in bauds for the Serial1 port
 */
 void SSC32::begin(int bauds)
 {
-	Serial.begin(bauds);
+	Serial1.begin(bauds);
 }
 
 
@@ -99,7 +99,7 @@ boolean SSC32::abortGroupCommand()
 
 	//According to the manual I should write the ascii character for <esc>
 	
-	Serial.write(27);
+	Serial1.write(27);
 	_commandType = SSC32_CMDGRP_TYPE_NONE;
 	_ttcm = -1;
 
@@ -122,11 +122,11 @@ boolean SSC32::endGroupCommand()
 	if (_ttcm != -1)
 	{
 		//Set the time to complete movement
-		Serial.print(" T");
-		Serial.print(_ttcm);
+		Serial1.print(" T");
+		Serial1.print(_ttcm);
 	}
 
-	Serial.println();
+	Serial1.println();
 	_commandType = SSC32_CMDGRP_TYPE_NONE;
 	_ttcm = -1;
 	return true;
@@ -164,16 +164,16 @@ boolean SSC32::servoMove(int channel, int position)
 	}
 
 	//We are good to go
-	Serial.print("#");
-	Serial.print(channel);
-	Serial.print(" P");
-	Serial.print(position);
-	Serial.print(" ");
+	Serial1.print("#");
+	Serial1.print(channel);
+	Serial1.print(" P");
+	Serial1.print(position);
+	Serial1.print(" ");
 
 	if (_commandType == SSC32_CMDGRP_TYPE_NONE)
 	{
 		//This is a single command so execute it
-		Serial.println();
+		Serial1.println();
 	}
 
 	return true;
@@ -218,18 +218,18 @@ boolean SSC32::servoMove(int channel, int position, int speed)
 	}
 
 	//We are good to go
-	Serial.print("#");
-	Serial.print(channel);
-	Serial.print(" P");
-	Serial.print(position);
-	Serial.print(" S");
-	Serial.print(speed);
-	Serial.print(" ");
+	Serial1.print("#");
+	Serial1.print(channel);
+	Serial1.print(" P");
+	Serial1.print(position);
+	Serial1.print(" S");
+	Serial1.print(speed);
+	Serial1.print(" ");
 
 	if (_commandType == SSC32_CMDGRP_TYPE_NONE)
 	{
 		//This is a single command so execute it
-		Serial.println();
+		Serial1.println();
 	}
 
 	return true;
@@ -274,18 +274,18 @@ boolean SSC32::servoMoveTime(int channel, int position, int ttcm)
 	}
 
 	//We are good to go
-	Serial.print("#");
-	Serial.print(channel);
-	Serial.print(" P");
-	Serial.print(position);
+	Serial1.print("#");
+	Serial1.print(channel);
+	Serial1.print(" P");
+	Serial1.print(position);
 
 	if (_commandType == SSC32_CMDGRP_TYPE_NONE)
 	{
 		//This is a single command so execute it
-		Serial.print(" T");
-		Serial.print(ttcm);
-		Serial.print(" ");
-		Serial.println();
+		Serial1.print(" T");
+		Serial1.print(ttcm);
+		Serial1.print(" ");
+		Serial1.println();
 	}else{
 		//This is a command group. Store the "time to complete movement" for later
 		_ttcm = ttcm;
@@ -325,16 +325,16 @@ boolean SSC32::pulseOffset(int channel, int offset)
 	}
 	
 	//We are good to go
-	Serial.print("#");
-	Serial.print(channel);
-	Serial.print(" PO");
-	Serial.print(offset);
-	Serial.print(" ");
+	Serial1.print("#");
+	Serial1.print(channel);
+	Serial1.print(" PO");
+	Serial1.print(offset);
+	Serial1.print(" ");
 
 	if (_commandType == SSC32_CMDGRP_TYPE_NONE)
 	{
 		//This is a single command so execute it
-		Serial.println();
+		Serial1.println();
 	}
 
 	return true;
@@ -363,18 +363,18 @@ boolean SSC32::discreteOutput(int channel, boolean level)
 	}
 
 	//We are good to go
-	Serial.print("#");
-	Serial.print(channel);
+	Serial1.print("#");
+	Serial1.print(channel);
 
 	if (level == HIGH)
-		Serial.print("H");
+		Serial1.print("H");
 	else
-		Serial.print("L");
+		Serial1.print("L");
 
 	if (_commandType == SSC32_CMDGRP_TYPE_NONE)
 	{
 		//This is a single command so execute it
-		Serial.println();
+		Serial1.println();
 	}
 
 	return true;
@@ -402,11 +402,11 @@ boolean SSC32::byteOutput(int bank, int value)
 	}
 
 	//We are good to go
-	Serial.print("#");
-	Serial.print(bank);
-	Serial.print(":");
-	Serial.print(value);
-	Serial.println();
+	Serial1.print("#");
+	Serial1.print(bank);
+	Serial1.print(":");
+	Serial1.print(value);
+	Serial1.println();
 	
 
 	return true;
@@ -419,14 +419,14 @@ boolean SSC32::byteOutput(int bank, int value)
 boolean SSC32::isMoving()
 {
 	char c = '.';
-	Serial.println("Q");
-	Serial.println();
+	Serial1.println("Q");
+	Serial1.println();
 	
 	//delay(50);
-	if (Serial.available())
+	if (Serial1.available())
 	{
 
-		c = Serial.read();
+		c = Serial1.read();
 	
 	}
 	
@@ -459,14 +459,14 @@ int SSC32::queryPulseWidth(int channel)
 	}
 
 	char c;
-	Serial.print("QP");
-	Serial.print(channel);
-	Serial.println();
+	Serial1.print("QP");
+	Serial1.print(channel);
+	Serial1.println();
 
 	delay(50);
-	if (Serial.available())
+	if (Serial1.available())
 	{	
-		c = Serial.read();
+		c = Serial1.read();
 		return int(c);
 	}else{
 		return -1;
@@ -491,35 +491,35 @@ int SSC32::readDigitalInput(int input)
 	{
 		case SSC32_DIGITAL_INPUT_A:
 			//Read digital input A
-			Serial.print("A");
+			Serial1.print("A");
 			break;
 		case SSC32_DIGITAL_INPUT_B:
 			//Read digital input B
-			Serial.print("B");
+			Serial1.print("B");
 			break;
 		case SSC32_DIGITAL_INPUT_C:
 			//Read digital input C
-			Serial.print("C");
+			Serial1.print("C");
 			break;
 		case SSC32_DIGITAL_INPUT_D:
 			//Read digital input D
-			Serial.print("D");
+			Serial1.print("D");
 			break;
 		case SSC32_DIGITAL_INPUT_AL:
 			//Read digital input AL
-			Serial.print("AL");
+			Serial1.print("AL");
 			break;
 		case SSC32_DIGITAL_INPUT_BL:
 			//Read digital input BL
-			Serial.print("BL");
+			Serial1.print("BL");
 			break;
 		case SSC32_DIGITAL_INPUT_CL:
 			//Read digital input CL
-			Serial.print("CL");
+			Serial1.print("CL");
 			break;
 		case SSC32_DIGITAL_INPUT_DL:
 			//Read digital input DL
-			Serial.print("DL");
+			Serial1.print("DL");
 			break;
 		default:
 			//Input not valid
@@ -528,9 +528,9 @@ int SSC32::readDigitalInput(int input)
 
 	char c;
 	delay(50);
-	if (Serial.available())
+	if (Serial1.available())
 	{
-		c = Serial.read();
+		c = Serial1.read();
 		return int(c);
 	}else{
 		return -1;
@@ -556,19 +556,19 @@ int SSC32::readAnalogInput(int input)
 	{
 		case SSC32_ANALOG_INPUT_VA:
 			//Read digital input A
-			Serial.print("VA");
+			Serial1.print("VA");
 			break;
 		case SSC32_ANALOG_INPUT_VB:
 			//Read digital input B
-			Serial.print("VB");
+			Serial1.print("VB");
 			break;
 		case SSC32_ANALOG_INPUT_VC:
 			//Read digital input C
-			Serial.print("VC");
+			Serial1.print("VC");
 			break;
 		case SSC32_ANALOG_INPUT_VD:
 			//Read digital input D
-			Serial.print("D");
+			Serial1.print("D");
 			break;
 		
 		default:
@@ -578,9 +578,9 @@ int SSC32::readAnalogInput(int input)
 
 	char c;
 	delay(50);
-	if (Serial.available())
+	if (Serial1.available())
 	{
-		c = Serial.read();
+		c = Serial1.read();
 		return int(c);
 	}else{
 		return -1;
