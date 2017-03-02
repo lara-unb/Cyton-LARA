@@ -36,14 +36,13 @@ from math import pi
 
 def DQ_A2ARM():
 
-    a2arm_DH_theta = np.array([pi/2,pi/2,-p1/2,pi,pi])
+    a2arm_DH_theta = np.array([pi/2,pi/2,-pi/2,pi,pi,-pi/2,pi])
     a2arm_DH_d = np.array([0.18465,0,0.27857,0,0.27747,0,0])
     a2arm_DH_a = np.array([0,-0.03175,-0.00502,0,0,0,0.04414])
     a2arm_DH_alpha = np.array([-pi/2,-pi/2,pi/2,pi/2,pi/2,-pi/2,pi])
-    a2arm_DH_dummy = np.array()
 
-    a2arm_DH_matrix = np.array([a2arm_DH_theta,a2arm_DH_d,a2arm_DH_a,a2arm_DH_alpha,a2arm_dummy])
+    a2arm_DH_matrix = np.array([a2arm_DH_theta,a2arm_DH_d,a2arm_DH_a,a2arm_DH_alpha])
 
-    a2arm = DQ_kinematics(a2arm_DH_matrix)
+    a2arm = DQ_kinematics(a2arm_DH_matrix,'standard')
 
     return a2arm
