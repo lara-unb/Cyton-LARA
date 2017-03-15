@@ -195,25 +195,28 @@ class DQ_kinematics:
         for i in range(0,self.links()):
             # Use the standard DH convention
             if self.convention() == "standard" :
-                z = self.get_z(q.q)
+                z = DQ(self.get_z(q.q))
+                # z = q *DQ([0,0,0,0.5, 0,0,0,0])*q.conj()
             # Use the modified DH convention
             else:
                 alpha = (self.alpha())[i]
                 a     = (self.a())[i]
-                dummy = (self.dummy())[i]
+                # dummy = (self.dummy())[i]
                 w     = DQ([0, 0, -sin( alpha ), cos( alpha ), 0, 0, -a*cos(alpha), -a*sin(alpha)])
                 z     = 0.5 * q * w * q.conj()
                 
 
-                if dummy == 0:
-                    q     = q * self.dh2dq(theta[ith+1], i+1)
-                    aux_j = z * q_effector
-                    for k in range(0,8):
-                        J[k,ith+1] = aux_j.q[k]
-                    ith = ith+1
-                else:
-                    #Dummy joints don't contribute to the Jacobian
-                    q = q * self.dh2dq(0.0,(i+1))
+            if (self.dummy())[i] == 0:
+                q     = q * self.dh2dq(theta[ith+1], i+1)
+                aux_j = z * q_effector
+                for k in range(0,8):
+                    # print z
+                    # print aux_j.q
+                    J[k,ith+1] = aux_j.q[k]
+                ith = ith+1
+            else:
+                #Dummy joints don't contribute to the Jacobian
+                q = q * self.dh2dq(0.0,(i+1))
         # Takes the base's displacement into account
         aux_J = haminus8(self.curr_effector)
         aux_J = np.dot(hamiplus8(self.curr_base),aux_J)

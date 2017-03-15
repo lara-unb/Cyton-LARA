@@ -36,13 +36,26 @@ from math import pi
 
 def DQ_A2ARM():
 
-    a2arm_DH_theta = np.array([pi/2,pi/2,-pi/2,pi,pi,-pi/2,pi])
-    a2arm_DH_d = np.array([0.18465,0,0.27857,0,0.27747,0,0])
-    a2arm_DH_a = np.array([0,-0.03175,-0.00502,0,0,0,0.04414])
-    a2arm_DH_alpha = np.array([-pi/2,-pi/2,pi/2,pi/2,pi/2,-pi/2,pi])
+    a2arm_DH_theta = np.array([pi/2,    pi/2,       -pi/2,      pi,     pi,     -pi/2,  pi])
+    a2arm_DH_d     = np.array([0.18465, 0,          0.27857,    0,      0.27747,0,      0])
+    a2arm_DH_a     = np.array([0,       -0.03175,   -0.00502,   0,      0,      0,      0.04414])
+    a2arm_DH_alpha = np.array([-pi/2,   -pi/2,      pi/2,       pi/2,   pi/2,   -pi/2,  pi])
+    # comau_dummy =    np.array([0,0,0,0,0,0,0])
 
     a2arm_DH_matrix = np.array([a2arm_DH_theta,a2arm_DH_d,a2arm_DH_a,a2arm_DH_alpha])
 
     a2arm = DQ_kinematics(a2arm_DH_matrix,'standard')
+
+
+    # comau_DH_theta=  np.array([pi/2,pi/2,-pi/2,pi,pi,-pi/2,pi])
+    # comau_DH_d =     np.array([-0.45, 0, 0, -0.64707, 0, -0.095, 0])
+    # comau_DH_a =     np.array([0, 0.150, 0.590, 0.13, 0, 0, 0])
+    # comau_DH_alpha = np.array([pi, pi/2, pi, -pi/2, -pi/2, pi/2, pi])
+    # comau_dummy =    np.array([0,0,0,0,0,0,1])
+
+    # comau_DH_matrix = np.array([comau_DH_theta,comau_DH_d,comau_DH_a,comau_DH_alpha,comau_dummy])
+
+    # a2arm = DQ_kinematics(comau_DH_matrix, 'modified')
+
 
     return a2arm

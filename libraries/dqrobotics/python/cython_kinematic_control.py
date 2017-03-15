@@ -3,31 +3,31 @@ from DQ_kinematics import *
 import numpy as np
 import scipy.linalg as LA
 from math import pi
-from DQ_A2ARM import DQ_A2ARM
+from DQ_CYTHON import DQ_CYTHON
 
 #Create a new DQ_kinematics object with the A2ARM standard Denavit-Hartenberg parameters
-a2arm_kine = DQ_A2ARM();
+cython_kine = DQ_CYTHON();
 
 # Basic definitions for the simulation
-theta  = np.array([0.1,0.8,-pi/4,0.8,pi/4,0.5,0.5])
-thetad = np.array([0.1,0.5,-pi/4,0.5,pi/4,0.5,0.5])
+theta  = np.ones(7)*0.5
+thetad = np.array([0.5,0.5,0.5,0.5,0.5,0.5,0.3])
 
 # Desired end-effector pose
-xd = a2arm_kine.fkm(thetad);
+xd = cython_kine.fkm(thetad);
 
 error = 1;
-epsilon = 0.001;
-K = 0.1;
+epsilon = 0.01;
+K = 0.5;
 
 while LA.norm(error) > epsilon:
-    x = a2arm_kine.fkm(theta);
-    J = a2arm_kine.jacobian(theta);
+    x = cython_kine.fkm(theta);
+    J = cython_kine.jacobian(theta);
     error = vec8(xd-x);
+    dtheta = np.dot(np.dot(LA.pinv(J),K),error);
+    theta = theta + dtheta;
+    print LA.norm(dtheta)
+    # print LA.norm(error)
     # print theta
-    theta = theta + np.dot(np.dot(LA.pinv(J),K),error);
-    # print J
-    print LA.norm(error)
-    print theta
     # print "Error"
     # print x
     # print xd

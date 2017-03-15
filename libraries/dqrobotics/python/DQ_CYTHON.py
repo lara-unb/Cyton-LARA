@@ -22,8 +22,11 @@ Contributors:
 Version History:
 - June 4, 2015 - Murilo M. Marinho
 -- Added license headers.
+-- Changed print statements to be compatible with python 3.5
 - May 28, 2015 - Murilo M. Marinho
 -- Initial Version
+- March 11, 2016 - Rafael Lima
+-- Modified for Cython Arm compatibility
 """
 
 from DQ import *
@@ -31,17 +34,16 @@ from DQ_kinematics import *
 import numpy as np
 from math import pi
 
-def DQ_COMAU():
+def DQ_CYTHON():
 
-    comau_DH_theta=  np.array([pi/2,pi/2,-pi/2,pi,pi,-pi/2,pi])
-    comau_DH_d =     np.array([-0.45, 0, 0, -0.64707, 0, -0.095, 0])
-    comau_DH_a =     np.array([0, 0.150, 0.590, 0.13, 0, 0, 0])
-    comau_DH_alpha = np.array([pi, pi/2, pi, -pi/2, -pi/2, pi/2, pi])
-    comau_dummy =    np.array([0,0,0,0,0,0,1])
+    cython_DH_theta = np.array([0     , 0      , 0     , 0      , pi    , pi/2   , 0     ])
+    cython_DH_d     = np.array([0.0379, -0.0046, 0.145 , -0.011 , 0.175 , 0.0074 , 0.0   ])
+    cython_DH_a     = np.array([0.0   , 0.0    , 0.0   , 0.0    , 0.0   , 0.0    , 0.0677])
+    cython_DH_alpha = np.array([0     , pi/2   , -pi/2 , pi/2   , -pi/2 , pi/2   , pi/2  ])
+    # comau_dummy =    np.array([0,0,0,0,0,0,0])
 
-    comau_DH_matrix = np.array([comau_DH_theta,comau_DH_d,comau_DH_a,comau_DH_alpha,comau_dummy])
+    cython_DH_matrix = np.array([cython_DH_theta,cython_DH_d,cython_DH_a,cython_DH_alpha])
 
-    comau = DQ_kinematics(comau_DH_matrix, 'modified')
+    cython = DQ_kinematics(cython_DH_matrix,'modified')
 
-    return comau
-
+    return cython
