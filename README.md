@@ -32,7 +32,7 @@ The Cyton C++ API provided by Robai is a good way to program the arm, however, a
 The Matlab is mainly used to calculate the Forward Kinematics of the arm, as the Arduino is not powerful enough to do so. Also, it is used to present the User Interface with a Menu with some options.
 
 ## Required Arduino Libraries
-1. SSC32: modified from [original](http://blog.martinperis.com/2011/05/libssc32-arduino-ssc32.html) to use port TX1 instead TX
+1. LibSSC32: modified from [original](https://martinperis.blogspot.com.br/2011/05/libssc32-arduino-ssc32.html) to use port TX1 instead TX
 2. Filters: https://github.com/JonHub/Filters
 3. StandardCplusplus: https://github.com/maniacbug/StandardCplusplus
 
