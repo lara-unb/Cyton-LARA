@@ -79,7 +79,9 @@
 #define SSC32_ANALOG_INPUT_VC 10
 #define SSC32_ANALOG_INPUT_VD 11
 
-#define SSC32_SERIAL Serial1
+#ifndef SSC32_SERIAL
+#define SSC32_SERIAL Serial
+#endif
 
 class SSC32
 {
