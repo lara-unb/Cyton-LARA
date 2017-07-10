@@ -5,9 +5,12 @@ The Robot Operating System (`ROS`_) is a flexible framework for writing robot so
 
 .. _ROS: http://www.ros.org/
 
-Description of the Robot
-------------------------
+Robot Description 
+-----------------
 
-rosserial
+Rosserial
 ---------
+
+MoveIt!
+-------
 
