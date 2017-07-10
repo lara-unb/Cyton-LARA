@@ -34,6 +34,8 @@ Indices and tables
    :caption: Hardware
 
    cyton.rst
+   arduino.rst
+   ssc32.rst
 
 .. _soft-docs:
 
@@ -41,4 +43,4 @@ Indices and tables
    :maxdepth: 2
    :caption: Software
 
-   ros
+   ros.rst
